@@ -13,6 +13,19 @@ class Network():
     def appendToListOfDemands(self, newEntry):
         self.m_ListOfDemands.append(newEntry)
 
+    def countTotalUnitCostPerPath(self):
+        listOfLinkCosts = []
+
+        for link in self.m_ListOfLinks:
+            listOfLinkCosts.append(link.m_Cost)
+
+        for demand in self.m_ListOfDemands:
+            for path in demand.m_ListOfPaths:
+                totalCost = 0
+                for link in path[1]:
+                    totalCost += int(listOfLinkCosts[int(link)-1])
+                path[2] = totalCost
+
     def getNumOfLinks(self):
         return len(self.m_ListOfLinks)
 

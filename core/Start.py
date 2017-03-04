@@ -16,4 +16,7 @@ if __name__ == "__main__":
     parser = Parser.Parser(pathToFile)
     if parser.parseNetwork():
         network = parser.returnNetwork()
+        network.countTotalUnitCostPerPath()
+        for demand in network.getListOfDemands():
+            print(demand.m_ListOfPaths)
 
