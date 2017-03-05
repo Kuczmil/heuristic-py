@@ -1,4 +1,4 @@
-from core import Parser
+from core import Parser, DAP
 import sys
 import os.path
 
@@ -17,6 +17,7 @@ if __name__ == "__main__":
     if parser.parseNetwork():
         network = parser.returnNetwork()
         network.countTotalUnitCostPerPath()
-        for demand in network.getListOfDemands():
-            print(demand.m_ListOfPaths)
+        dap = DAP.DAP(network)
+        dap.startBruteForce()
+        dap.printSolution()
 
