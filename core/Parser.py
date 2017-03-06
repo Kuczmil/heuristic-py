@@ -44,10 +44,12 @@ class Parser():
             firstLineOfDemands = self.yielder.__next__()
             while (len(firstLineOfDemands) == 0):
                 firstLineOfDemands = self.yielder.__next__()
+
             firstLineOfDemands = firstLineOfDemands.split(" ")
             originNode = firstLineOfDemands[0]
             endNode = firstLineOfDemands[1]
             demand = firstLineOfDemands[2]
+
             numberOfPaths = int(self.yielder.__next__())
             newDemand = Demands.Demands(originNode, endNode, demand, numberOfPaths)
             for path in range(0, numberOfPaths):

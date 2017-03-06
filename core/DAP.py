@@ -2,22 +2,22 @@ from core import Network
 import random
 
 class DAP():
-    network = Network.Network()
+    m_Network = Network.Network()
     m_ListOfLambdasPerLink = []
     m_Solution = []
 
     def __init__(self, network):
-        self.network = network
+        self.m_Network = network
         self.initializeListOfLambdasPerLink()
 
 
     def initializeListOfLambdasPerLink(self):
-        for i in range(0, len(self.network.getListOfLinks())):
+        for i in range(0, len(self.m_Network.getListOfLinks())):
             self.m_ListOfLambdasPerLink.append(0)
 
     def startBruteForce(self):
 
-        for demand in self.network.getListOfDemands():
+        for demand in self.m_Network.getListOfDemands():
             demandToFulfill = int(demand.m_Demand)
             listOfLoads = []
 
@@ -35,7 +35,7 @@ class DAP():
             return True
         else:
             print("Last iteration of brutforce was unsuccessful. New iteration started.")
-            for link in self.network.getListOfLinks():
+            for link in self.m_Network.getListOfLinks():
                 link.resetCapacityInLambdas()
             self.startBruteForce()
 
@@ -43,10 +43,10 @@ class DAP():
         solutionColumn = 0
         solutionRow = 0
 
-        for demand in self.network.getListOfDemands():
+        for demand in self.m_Network.getListOfDemands():
             for path in demand.m_ListOfPaths:
                 for edge in path[1]:
-                    properLink = self.network.getListOfLinks()[int(edge)-1]
+                    properLink = self.m_Network.getListOfLinks()[int(edge) - 1]
                     if not properLink.reduceAvailableCapacity(self.m_Solution[solutionColumn][solutionRow]):
                         return False
 

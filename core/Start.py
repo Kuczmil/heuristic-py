@@ -1,4 +1,4 @@
-from core import Parser, DAP
+from core import Parser, DAP, DDAP
 import sys
 import os.path
 
@@ -20,4 +20,7 @@ if __name__ == "__main__":
         dap = DAP.DAP(network)
         dap.startBruteForce()
         dap.printSolution()
+
+        ddap = DDAP.DDAP(network, 10000)
+        ddap.startBruteForceIterations()
 
