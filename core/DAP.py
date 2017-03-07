@@ -21,20 +21,34 @@ class DAP():
             demandToFulfill = int(demand.m_Demand)
             listOfLoads = []
 
-            for path in demand.m_ListOfPaths:
-                if (demandToFulfill > 0):
-                    loadPerGivenPath = random.randint(0, demandToFulfill)
-                    demandToFulfill -= loadPerGivenPath
-                    listOfLoads.append(loadPerGivenPath)
-                else:
-                    listOfLoads.append(0)
+            sizeOfListOfPaths = len(demand.m_ListOfPaths)
+            for i in range (0, sizeOfListOfPaths):
+                listOfLoads.append(0)
+
+            while demandToFulfill != 0:
+                loadPerGivenPath = random.randint(0, demandToFulfill)
+                pathToAssignLoad = random.randint(0, sizeOfListOfPaths-1)
+                listOfLoads[pathToAssignLoad] += loadPerGivenPath
+                demandToFulfill -= loadPerGivenPath
+
+            # This part of code is wrong since we do not check whether all demand is assigned
+            # Also first paths have higher probability that larger load will be assigned to them
+            # for path in demand.m_ListOfPaths:
+            #     if (demandToFulfill > 0):
+            #         loadPerGivenPath = random.randint(0, demandToFulfill)
+            #         demandToFulfill -= loadPerGivenPath
+            #         listOfLoads.append(loadPerGivenPath)
+            #     else:
+            #         listOfLoads.append(0)
 
             self.m_Solution.append(listOfLoads)
 
         if self.checkBruteForceSoultion():
+            for link in self.m_Network.getListOfLinks():
+                link.resetCapacityInLambdas()
             return True
         else:
-            print("Last iteration of brutforce was unsuccessful. New iteration started.")
+            #print("Last iteration of brutforce was unsuccessful. New iteration started.")
             for link in self.m_Network.getListOfLinks():
                 link.resetCapacityInLambdas()
             self.startBruteForce()
@@ -58,7 +72,7 @@ class DAP():
 
     def printSolution(self):
 
-        print("SOLUTION:")
+        print("SOLUTION DAP:")
         maxNumberOfRows = max(len(columnSize) for columnSize in self.m_Solution)
         for i in range(0, maxNumberOfRows):
             lineToPrint = ""

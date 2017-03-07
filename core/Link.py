@@ -17,7 +17,7 @@ class Link():
 
     def reduceAvailableCapacity(self, usedLambdas):
         self.m_CapacityInLambdas -= usedLambdas
-        if (self.m_CapacityInLambdas > 0):
+        if (self.m_CapacityInLambdas >= 0):
             return True
         else:
             return False

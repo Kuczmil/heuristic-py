@@ -37,7 +37,7 @@ class DDAP(DAP.DAP):
         self.m_Solution.clear()
 
     def printSolution(self):
-        print("SOLUTION:")
+        print("SOLUTION DDAP:")
         maxNumberOfRows = max(len(columnSize) for columnSize in self.m_BestSolution)
         for i in range(0, maxNumberOfRows):
             lineToPrint = ""
