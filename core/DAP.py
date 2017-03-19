@@ -1,10 +1,13 @@
 from core import Network
 import random
+from random import shuffle
+import time
 
 class DAP():
     m_Network = Network.Network()
     m_ListOfLambdasPerLink = []
     m_Solution = []
+    numberOfDDD = 0
 
     def __init__(self, network):
         self.m_Network = network
@@ -16,8 +19,35 @@ class DAP():
             self.m_ListOfLambdasPerLink.append(0)
 
     def startBruteForce(self):
+        areConditionsMet = False
+        while(not areConditionsMet):
+            self.doBruteForce()
+            if self.checkBruteForceSoultion():
+                self.numberOfDDD = 0
+                areConditionsMet = True
+                return True
+            else:
+                #print("Last iteration of brutforce was unsuccessful. New iteration started.")
+                if (self.numberOfDDD%1000 == 0):
+                    print(self.numberOfDDD)
+                # for link in self.m_Network.getListOfLinks():
+                #     print(link.m_CapacityInLambdas)
 
-        for demand in self.m_Network.getListOfDemands():
+                self.numberOfDDD += 1
+            for link in self.m_Network.getListOfLinks():
+                link.resetCapacityInLambdas()
+                # print(link.m_CapacityInLambdas)
+
+
+    def doBruteForce(self):
+
+        lengthOfListOfDemand = len(self.m_Network.getListOfDemands())
+        shuffledListOfOrder = [x for x in range(0, lengthOfListOfDemand)]
+        shuffle(shuffledListOfOrder)
+        dictOfSolutions = {}
+
+        for elementFromShuffledListOfOrder in shuffledListOfOrder:
+            demand = self.m_Network.getListOfDemands()[elementFromShuffledListOfOrder]
             demandToFulfill = int(demand.m_Demand)
             listOfLoads = []
 
@@ -26,32 +56,30 @@ class DAP():
                 listOfLoads.append(0)
 
             while demandToFulfill != 0:
+                random.seed(time.clock())
                 loadPerGivenPath = random.randint(0, demandToFulfill)
+                loadPerGivenPath %= 2
                 pathToAssignLoad = random.randint(0, sizeOfListOfPaths-1)
                 listOfLoads[pathToAssignLoad] += loadPerGivenPath
                 demandToFulfill -= loadPerGivenPath
 
-            # This part of code is wrong since we do not check whether all demand is assigned
-            # Also first paths have higher probability that larger load will be assigned to them
-            # for path in demand.m_ListOfPaths:
-            #     if (demandToFulfill > 0):
-            #         loadPerGivenPath = random.randint(0, demandToFulfill)
-            #         demandToFulfill -= loadPerGivenPath
-            #         listOfLoads.append(loadPerGivenPath)
-            #     else:
-            #         listOfLoads.append(0)
+            dictOfSolutions[elementFromShuffledListOfOrder] = listOfLoads
+        # print(dictOfSolutions)
+        for i in range(0, lengthOfListOfDemand):
+            self.m_Solution.append(dictOfSolutions[i])
+        dictOfSolutions.clear()
+        #
+        # if self.checkBruteForceSoultion():
+        #     self.numberOfDDD = 0
+        #     for link in self.m_Network.getListOfLinks():
+        #         link.resetCapacityInLambdas()
+        #     return True
+        # else:
+        #     print("Last iteration of brutforce was unsuccessful. New iteration started.")
+        #     for link in self.m_Network.getListOfLinks():
+        #         link.resetCapacityInLambdas()
+        #     self.startBruteForce()
 
-            self.m_Solution.append(listOfLoads)
-
-        if self.checkBruteForceSoultion():
-            for link in self.m_Network.getListOfLinks():
-                link.resetCapacityInLambdas()
-            return True
-        else:
-            #print("Last iteration of brutforce was unsuccessful. New iteration started.")
-            for link in self.m_Network.getListOfLinks():
-                link.resetCapacityInLambdas()
-            self.startBruteForce()
 
     def checkBruteForceSoultion(self):
         solutionColumn = 0
@@ -62,6 +90,8 @@ class DAP():
                 for edge in path[1]:
                     properLink = self.m_Network.getListOfLinks()[int(edge) - 1]
                     if not properLink.reduceAvailableCapacity(self.m_Solution[solutionColumn][solutionRow]):
+                        print("Edge number: " + edge)
+                        self.m_Solution.clear()
                         return False
 
                 solutionRow += 1

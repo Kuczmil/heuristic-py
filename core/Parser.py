@@ -53,7 +53,9 @@ class Parser():
             numberOfPaths = int(self.yielder.__next__())
             newDemand = Demands.Demands(originNode, endNode, demand, numberOfPaths)
             for path in range(0, numberOfPaths):
-                newPath = self.yielder.__next__().split(" ")
+                newPathBeforeSplit = self.yielder.__next__().strip()
+                newPath = newPathBeforeSplit.split(" ")
+                print(newPath)
                 newDemand.addToListOfPaths(int(newPath[0]), newPath[1:-1])
             self.network.appendToListOfDemands(newDemand)
 
