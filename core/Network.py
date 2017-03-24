@@ -17,13 +17,13 @@ class Network():
         listOfLinkCosts = []
 
         for link in self.m_ListOfLinks:
-            listOfLinkCosts.append(link.m_Cost)
+            listOfLinkCosts.append(link.m_Cost/link.m_CapacityInLambdas)
 
         for demand in self.m_ListOfDemands:
             for path in demand.m_ListOfPaths:
                 totalCost = 0
                 for link in path[1]:
-                    totalCost += int(listOfLinkCosts[int(link)-1])
+                    totalCost += listOfLinkCosts[int(link)-1]
                 path[2] = totalCost
 
     def getNumOfLinks(self):

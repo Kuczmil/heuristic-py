@@ -14,6 +14,7 @@ class DDAP(DAP.DAP):
     def startBruteForceIterations(self):
         for i in range(0, self.m_NumberOfRounds):
             self.startBruteForce()
+            print("Znaleziono " + str(i) + " rozwiązań.")
             self.countCostOfSolution()
 
         self.printSolution()

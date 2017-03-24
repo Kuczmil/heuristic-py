@@ -11,7 +11,7 @@ class Link():
         self.m_OriginNode = originNode
         self.m_EndNode = endNode
         self.m_Capacity = capacity
-        self.m_Cost = cost
+        self.m_Cost = int(cost)
         self.m_LambdasPerFiber = lambdasPerFiber
         self.resetCapacityInLambdas()
 
@@ -20,7 +20,9 @@ class Link():
         if (self.m_CapacityInLambdas >= 0):
             return True
         else:
+ #            assert 1 == 0, "Error"
             return False
 
     def resetCapacityInLambdas(self):
         self.m_CapacityInLambdas = int(self.m_LambdasPerFiber) * int(self.m_Capacity)
+        # print("Capacity in lambdas equals: " + str(self.m_CapacityInLambdas))
