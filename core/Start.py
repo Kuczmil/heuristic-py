@@ -41,7 +41,7 @@ if __name__ == "__main__":
         elif settings['method'] == 'evolution' and settings['problem'] == 'DDAP':
             evo = Evolution.Evolution(populationSize, probabOfCrossingover, probabOfMutation, seed, stopCriterion, valueOfStopCriterion)
             evo.createStartingPopulation(network)
-            evo.doRoundOfEvolution()
+            evo.startEvolutionAlgorithm()
 
         elif settings['method'] == 'brutforce' and settings['problem'] == 'DAP':
             dap = DAP.DAP(network)

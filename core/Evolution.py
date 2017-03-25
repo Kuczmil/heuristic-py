@@ -7,11 +7,12 @@
 #
 from core.DAP import DAP as DAP
 import core.Network
-import random, operator, time
+import random, operator, time, math
 
 
 class Evolution():
     m_Population = []
+    # control variables
     m_StartPopulationSize = 0
     m_ProbabilityOfCrossingover = 0.0
     m_ProbabilityOfMutation = 0.0
@@ -20,6 +21,13 @@ class Evolution():
     m_ChosenCriterion = 'time'
     m_ValueOfChosenCriterion = -1
     dap = DAP()
+    # variables for storing data
+    m_ListOfBestResultOfRound = []
+    m_NumberOfRound = 0
+    # variables connected with criterion checking
+    m_NumberOfMutations = 0
+    m_LastBestResult = math.inf
+    m_DurationOfLastBestResult = 0
 
     def __init__(self, startPopulationSize, probabOfCrossingover, probabOfMutation, seed, chosenStopCriterion, valueOfChosenCriterion=-1):
         self.m_StartPopulationSize = startPopulationSize
@@ -41,12 +49,36 @@ class Evolution():
         # for population in self.m_Population:
         #     print(population)
 
-    def doRoundOfEvolution(self):
-        for i in range(0, 5000):
-            self.crossingOver()
-            self.mutation()
-            self.selectNewPopulation()
+    def startEvolutionAlgorithm(self):
+        if self.m_ChosenCriterion == 'time':
+            currentTime = time.time()
+            stopTime = currentTime + int(self.m_ValueOfChosenCriterion) + 1 # added one as guard
+            while time.time() < stopTime:
+                self.doRoundOfEvolutionAlogrithm()
+
+        elif self.m_ChosenCriterion == 'number_of_generations':
+            numOfGenerations = int(self.m_ValueOfChosenCriterion)
+            for i in range(0, numOfGenerations):
+                self.doRoundOfEvolutionAlogrithm()
+
+        elif self.m_ChosenCriterion == 'number_of_mutations':
+            numOfMutations = int(self.m_ValueOfChosenCriterion)
+            while numOfMutations > self.m_NumberOfMutations:
+                self.doRoundOfEvolutionAlogrithm()
+
+        elif self.m_ChosenCriterion == 'no_improvement':
+            numOfRoundsWithoutImprovement = int(self.m_ValueOfChosenCriterion)
+            while numOfRoundsWithoutImprovement > self.m_DurationOfLastBestResult:
+                self.doRoundOfEvolutionAlogrithm()
+
+        else:
+            assert False, "Given criterion is wrong"
         self.selectNewPopulation(True)
+
+    def doRoundOfEvolutionAlogrithm(self):
+        self.crossingOver()
+        self.mutation()
+        self.selectNewPopulation()
 
     def crossingOver(self):
         for i in range(0, len(self.m_Population)):
@@ -68,6 +100,7 @@ class Evolution():
         for i in range(0, len(self.m_Population)):
             if random.random() < self.m_ProbabilityOfMutation:
                 self.m_Population[i] = self.dap.createRandomPopulationAndReturnUncheckedResult()
+                self.m_NumberOfMutations += 1
 
     def selectNewPopulation(self, final=False):
         costs = self.dap.countCostOfSolution(self.m_Population)
@@ -77,6 +110,15 @@ class Evolution():
             for i in range(0, self.m_StartPopulationSize):
                 newPopulation.append(list(self.m_Population[sortedCosts[i][0]]))
             self.m_Population = list(newPopulation)
+            self.m_ListOfBestResultOfRound.append("Best cost of round " + str(self.m_NumberOfRound) + ": " + str(sortedCosts[0][0]) + ". Population: " + self.m_Population[0])
+            self.m_NumberOfRound += 1
+
+            # for checking duration of lastest best result
+            if int(sortedCosts[0][0]) < self.m_LastBestResult:
+                self.m_LastBestResult = sortedCosts[0][0]
+                self.m_DurationOfLastBestResult = 0
+            else:
+                self.m_DurationOfLastBestResult += 1
         else:
             self.saveResult(sortedCosts[0][1])
 
@@ -101,3 +143,8 @@ class Evolution():
             for gene in self.m_Population[0]:
                 f.write(str(i+1) + ": " + str(gene) + "\n")
                 i += 1
+
+            f.write("######################")
+            f.write("Details of each round:")
+            f.write("######################")
+            f.writelines(self.m_ListOfBestResultOfRound)

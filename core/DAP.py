@@ -11,7 +11,6 @@ class DAP():
         self.m_Network = network
         self.initializeListOfLambdasPerLink()
 
-
     def initializeListOfLambdasPerLink(self):
         for i in range(0, len(self.m_Network.getListOfLinks())):
             self.m_ListOfLambdasPerLink.append(0)
@@ -31,7 +30,6 @@ class DAP():
             for link in self.m_Network.getListOfLinks():
                 link.resetCapacityInLambdas()
                 # print(link.m_CapacityInLambdas)
-
 
     def doBruteForce(self):
         lengthOfListOfDemand = len(self.m_Network.getListOfDemands())
