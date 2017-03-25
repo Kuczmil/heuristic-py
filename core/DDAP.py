@@ -1,7 +1,7 @@
-from core import DAP
+from core import Problem
 import math
 
-class DDAP(DAP.DAP):
+class DDAP(Problem.Problem):
     m_CostOfBestSolution = math.inf
     m_BestSolution = []
     m_NumberOfRounds = 0

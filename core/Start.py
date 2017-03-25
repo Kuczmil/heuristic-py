@@ -1,4 +1,4 @@
-from core import Parser, DAP, DDAP, Evolution
+from core import Parser, Problem, DDAP, Evolution
 import sys
 import os.path
 
@@ -41,12 +41,12 @@ if __name__ == "__main__":
             evo.createStartingPopulation(network)
             evo.startEvolutionAlgorithm()
 
-        elif settings['method'] == 'brutforce' and settings['problem'] == 'DAP':
-            dap = DAP.DAP(network)
+        elif settings['method'] == 'bruteforce' and settings['problem'] == 'DAP':
+            dap = Problem.Problem(network)
             dap.startBruteForce()
             dap.printSolution()
 
-        elif settings['method'] == 'brutforce' and settings['problem'] == 'DDAP':
+        elif settings['method'] == 'bruteforce' and settings['problem'] == 'DDAP':
             ddap = DDAP.DDAP(network, 100)
             ddap.startBruteForceIterations()
 

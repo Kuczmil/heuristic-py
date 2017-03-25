@@ -1,4 +1,4 @@
-# brutforce or evolution
+# bruteforce or evolution
 method=evolution
 
 # DAP or DDAP

@@ -2,7 +2,7 @@ from core import Network
 from random import shuffle
 import time, math, random
 
-class DAP():
+class Problem():
     m_Network = Network.Network()
     m_ListOfLambdasPerLink = []
     m_Solution = []

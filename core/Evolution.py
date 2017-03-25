@@ -5,7 +5,7 @@
 #  * choice of stop criteria (time, number of generations, number of mutations, no improvement in consecutive N generations)
 #  * save trajectory to file - sequence of best chromosomes in following generations
 #
-from core.DAP import DAP as DAP
+from core.Problem import Problem as Problem
 import core.Network
 import random, operator, time, math
 
@@ -20,7 +20,7 @@ class Evolution():
     m_ListOfStopCriteria = ['time', 'number_of_generations', 'number_of_mutations', 'no_improvement']
     m_ChosenCriterion = 'time'
     m_ValueOfChosenCriterion = -1
-    dap = DAP()
+    dap = Problem()
     # variables for storing data
     m_ListOfBestResultOfRound = []
     m_NumberOfRound = 0
@@ -42,7 +42,7 @@ class Evolution():
 
     def createStartingPopulation(self, network):
         assert type(network) is core.Network.Network, "Lenght of passed network is lower than 1!"
-        self.dap = DAP(network)
+        self.dap = Problem(network)
         for i in range(0, self.m_StartPopulationSize):
             self.m_Population.append(self.dap.createRandomPopulationAndReturnUncheckedResult())
 
