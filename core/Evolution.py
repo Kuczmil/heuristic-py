@@ -29,7 +29,8 @@ class Evolution():
     m_LastBestResult = math.inf
     m_DurationOfLastBestResult = 0
 
-    def __init__(self, startPopulationSize, probabOfCrossingover, probabOfMutation, seed, chosenStopCriterion, valueOfChosenCriterion=-1):
+    def __init__(self, isDAP, startPopulationSize, probabOfCrossingover, probabOfMutation, seed, chosenStopCriterion, valueOfChosenCriterion=-1):
+        self.isDAP = isDAP
         self.m_StartPopulationSize = startPopulationSize
         self.m_ProbabilityOfCrossingover = probabOfCrossingover
         self.m_ProbabilityOfMutation = probabOfMutation
@@ -103,19 +104,24 @@ class Evolution():
                 self.m_NumberOfMutations += 1
 
     def selectNewPopulation(self, final=False):
-        costs = self.dap.countCostOfSolution(self.m_Population)
+        # either it is DAP or it is DDAP
+        if self.isDAP:
+            costs = self.dap.countCostOfSolutionDAP(self.m_Population)
+        else:
+            costs = self.dap.countCostOfSolution(self.m_Population)
+
         sortedCosts = sorted(costs.items(), key=operator.itemgetter(1))
         newPopulation = []
         if not final:
             for i in range(0, self.m_StartPopulationSize):
                 newPopulation.append(list(self.m_Population[sortedCosts[i][0]]))
             self.m_Population = list(newPopulation)
-            self.m_ListOfBestResultOfRound.append("Best cost of round " + str(self.m_NumberOfRound) + ": " + str(sortedCosts[0][0]) + ". Population: " + self.m_Population[0])
+            self.m_ListOfBestResultOfRound.append("Best cost of round " + str(self.m_NumberOfRound) + ": " + str(sortedCosts[0][1]) + ". Population: " + str(self.m_Population[0]) + "\n")
             self.m_NumberOfRound += 1
 
             # for checking duration of lastest best result
-            if int(sortedCosts[0][0]) < self.m_LastBestResult:
-                self.m_LastBestResult = sortedCosts[0][0]
+            if int(sortedCosts[0][1]) != self.m_LastBestResult:
+                self.m_LastBestResult = sortedCosts[0][1]
                 self.m_DurationOfLastBestResult = 0
             else:
                 self.m_DurationOfLastBestResult += 1

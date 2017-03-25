@@ -20,7 +20,6 @@ class Link():
         if (self.m_CapacityInLambdas >= 0):
             return True
         else:
- #            assert 1 == 0, "Error"
             return False
 
     def resetCapacityInLambdas(self):

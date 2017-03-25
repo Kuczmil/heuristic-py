@@ -127,23 +127,34 @@ class DAP():
 
         return dictOfCosts
 
-    def countCostOfSolutionDAP(self):
-        solutionColumn = 0
-        solutionRow = 0
+    def countCostOfSolutionDAP(self, listOfSolutions=0):
+        numberOfChromosome = 0
         dictOfCosts = {}
+        totalNumberOfNotfittedLambdas = 0
 
-        for demand in self.m_Network.getListOfDemands():
-            for path in demand.m_ListOfPaths:
-                for edge in path[1]:
-                    properLink = self.m_Network.getListOfLinks()[int(edge) - 1]
-                    if not properLink.reduceAvailableCapacity(self.m_Solution[solutionColumn][solutionRow]):
-                        # print("Edge number: " + edge)
-                        self.m_Solution.clear()
-                        return False
-
-                solutionRow += 1
+        for chromosome in listOfSolutions:
+            solutionColumn = 0
             solutionRow = 0
-            solutionColumn += 1
+            for demand in self.m_Network.getListOfDemands():
+                for path in demand.m_ListOfPaths:
+                    for edge in path[1]:
+                        properLink = self.m_Network.getListOfLinks()[int(edge) - 1]
+                        properLink.reduceAvailableCapacity(chromosome[solutionColumn][solutionRow])
+                    solutionRow += 1
+                solutionRow = 0
+                solutionColumn += 1
+
+            for link in self.m_Network.getListOfLinks():
+                totalNumberOfNotfittedLambdas += abs(link.m_CapacityInLambdas)
+                link.resetCapacityInLambdas()
+
+            dictOfCosts[numberOfChromosome] = totalNumberOfNotfittedLambdas
+            totalNumberOfNotfittedLambdas = 0
+            numberOfChromosome += 1
+
+        print(dictOfCosts)
+        return dictOfCosts
+
 
     def printSolution(self):
 

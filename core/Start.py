@@ -35,11 +35,9 @@ if __name__ == "__main__":
         valueOfStopCriterion = int(settings['value_of_stop_criterion'])
         seed = int(settings['seed'])
 
-        if settings['method'] == 'evolution' and settings['problem'] == 'DAP':
-            pass
-
-        elif settings['method'] == 'evolution' and settings['problem'] == 'DDAP':
-            evo = Evolution.Evolution(populationSize, probabOfCrossingover, probabOfMutation, seed, stopCriterion, valueOfStopCriterion)
+        if settings['method'] == 'evolution':
+            isDAP = True if (settings['problem'] == 'DAP') else False
+            evo = Evolution.Evolution(isDAP, populationSize, probabOfCrossingover, probabOfMutation, seed, stopCriterion, valueOfStopCriterion)
             evo.createStartingPopulation(network)
             evo.startEvolutionAlgorithm()
 
