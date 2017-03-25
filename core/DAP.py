@@ -1,7 +1,6 @@
 from core import Network
-import random
 from random import shuffle
-import time
+import time, math, random
 
 class DAP():
     m_Network = Network.Network()
@@ -81,8 +80,6 @@ class DAP():
         solutionColumn = 0
         solutionRow = 0
 
-        # print(self.m_Solution)
-
         for demand in self.m_Network.getListOfDemands():
             for path in demand.m_ListOfPaths:
                 for edge in path[1]:
@@ -104,20 +101,51 @@ class DAP():
         numOfGene = 0
         numOfAllel = 0
         listOfDemands = self.m_Network.getListOfDemands()
+        costsPerEdges = {}
+        listOfLinks = self.m_Network.getListOfLinks()
 
         for chromosome in listOfSolutions:
             totalCost = 0
             for gene in chromosome:
                 for allel in gene:
-                    totalCost += allel * listOfDemands[numOfGene].m_ListOfPaths[numOfAllel][2]
+                    for edge in listOfDemands[numOfGene].m_ListOfPaths[numOfAllel][1]:
+                        if edge not in costsPerEdges:
+                            costsPerEdges[edge] = allel
+                        else:
+                            costsPerEdges[edge] += allel
                     numOfAllel += 1
                 numOfAllel = 0
                 numOfGene += 1
+            for edge, usage in costsPerEdges.items():
+                realEdge = int(edge) - 1  # Edges are counted from 1, lists from 0
+                capacityInLambdas = listOfLinks[realEdge].m_CapacityInLambdas
+                costPerFibre = listOfLinks[realEdge].m_Cost
+                totalCost += math.ceil(2 * usage / capacityInLambdas) * costPerFibre
             dictOfCosts[numOfChromosome] = totalCost
             numOfAllel = 0
             numOfGene = 0
             numOfChromosome += 1
+            costsPerEdges.clear()
+
         return dictOfCosts
+
+    def countCostOfSolutionDAP(self):
+        solutionColumn = 0
+        solutionRow = 0
+        dictOfCosts = {}
+
+        for demand in self.m_Network.getListOfDemands():
+            for path in demand.m_ListOfPaths:
+                for edge in path[1]:
+                    properLink = self.m_Network.getListOfLinks()[int(edge) - 1]
+                    if not properLink.reduceAvailableCapacity(self.m_Solution[solutionColumn][solutionRow]):
+                        # print("Edge number: " + edge)
+                        self.m_Solution.clear()
+                        return False
+
+                solutionRow += 1
+            solutionRow = 0
+            solutionColumn += 1
 
     def printSolution(self):
 

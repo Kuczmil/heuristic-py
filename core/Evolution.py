@@ -7,7 +7,7 @@
 #
 from core.DAP import DAP as DAP
 import core.Network
-import random, operator
+import random, operator, time
 
 
 class Evolution():
@@ -17,18 +17,18 @@ class Evolution():
     m_ProbabilityOfMutation = 0.0
     m_SeedForPseudorandomFunction = 0
     m_ListOfStopCriteria = ['time', 'number_of_generations', 'number_of_mutations', 'no_improvement']
-    m_ChosenCriterium = 'time'
-    m_ValueOfChosenCriterium = -1
+    m_ChosenCriterion = 'time'
+    m_ValueOfChosenCriterion = -1
     dap = DAP()
 
-    def __init__(self, startPopulationSize, probabOfCrossingover, probabOfMutation, seed, chosenStopCriterium, valueOfChosenCriterium=-1):
+    def __init__(self, startPopulationSize, probabOfCrossingover, probabOfMutation, seed, chosenStopCriterion, valueOfChosenCriterion=-1):
         self.m_StartPopulationSize = startPopulationSize
         self.m_ProbabilityOfCrossingover = probabOfCrossingover
         self.m_ProbabilityOfMutation = probabOfMutation
         self.m_SeedForPseudorandomFunction = seed
-        self.m_ChosenCriterium = chosenStopCriterium
-        if (valueOfChosenCriterium != -1):
-            self.m_ValueOfChosenCriterium = valueOfChosenCriterium
+        self.m_ChosenCriterion = chosenStopCriterion
+        if (valueOfChosenCriterion != -1):
+            self.m_ValueOfChosenCriterion = valueOfChosenCriterion
         random.seed(self.m_SeedForPseudorandomFunction)
 
     def createStartingPopulation(self, network):
@@ -42,7 +42,7 @@ class Evolution():
         #     print(population)
 
     def doRoundOfEvolution(self):
-        for i in range(0, 100):
+        for i in range(0, 5000):
             self.crossingOver()
             self.mutation()
             self.selectNewPopulation()
@@ -78,8 +78,26 @@ class Evolution():
                 newPopulation.append(list(self.m_Population[sortedCosts[i][0]]))
             self.m_Population = list(newPopulation)
         else:
-            print(sortedCosts)
-            print(self.m_Population[0])
+            self.saveResult(sortedCosts[0][1])
 
     def checkIfPopulationCorrect(self):
         pass
+
+    def saveResult(self, bestCost=0):
+        nameOfFile = "result_" + time.strftime("%Y%m%d-%H%M%S") + ".txt"
+        pathToFile = "../outputs/" + nameOfFile
+        with open(pathToFile, 'w') as f:
+            f.write("Population size: " + str(self.m_StartPopulationSize) + "\n")
+            f.write("Probability of crossingover: " + str(self.m_ProbabilityOfCrossingover) + "\n")
+            f.write("Probability of mutation: " + str(self.m_ProbabilityOfMutation) + "\n")
+            f.write("Seed for pseudorandom functions: " + str(self.m_SeedForPseudorandomFunction) + "\n")
+            f.write("Chosen stop criterion: " + str(self.m_ChosenCriterion) + "\n")
+            if self.m_ValueOfChosenCriterion is not -1:
+                f.write("Value of chosen criterium: " + str(self.m_ValueOfChosenCriterion) + "\n")
+
+            f.write("\n\n\n")
+            f.write("Cost of best chromosome: " + str(bestCost) + "\n")
+            i = 0
+            for gene in self.m_Population[0]:
+                f.write(str(i+1) + ": " + str(gene) + "\n")
+                i += 1

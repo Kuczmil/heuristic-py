@@ -1,0 +1,23 @@
+# brutforce or evolution
+method=evolution
+
+# DAP or DDAP
+problem=DDAP
+
+# size of population
+population_size=1000
+
+# probability of crossingover - float between 0.0 and 1.0
+probab_of_crossingover=0.4
+
+# probability of mutation - float between 0.0 and 1.0
+probab_of_mutation=0.02
+
+# stop criterion - one within ['time', 'number_of_generations', 'number_of_mutations', 'no_improvement']
+stop_criterion=number_of_generations
+
+# value of stop criterion
+value_of_stop_criterion=1000
+
+# seed (integer)
+seed=14894921
