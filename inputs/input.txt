@@ -1,11 +1,11 @@
 # bruteforce or evolution
-method=bruteforce
+method=evolution
 
 # DAP or DDAP
-problem=DDAP
+problem=DAP
 
 # size of population
-population_size=1000
+population_size=10
 
 # probability of crossingover - float between 0.0 and 1.0
 probab_of_crossingover=0.6
