@@ -1,5 +1,5 @@
 # bruteforce or evolution
-method=evolution
+method=bruteforce
 
 # DAP or DDAP
 problem=DDAP

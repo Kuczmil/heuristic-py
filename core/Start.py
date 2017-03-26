@@ -1,4 +1,4 @@
-from core import Parser, Problem, DDAP, Evolution, BruteForce
+from core import Parser, Problem, Evolution, BruteForce
 import sys
 import os.path
 
@@ -33,17 +33,17 @@ def start(arg1, arg2):
             evo.createStartingPopulation(network)
             evo.startEvolutionAlgorithm()
 
-        elif settings['method'] == 'bruteforce' and settings['problem'] == 'DAP':
-            dap = Problem.Problem(network)
-            dap.startBruteForce()
-            dap.printSolution()
+        elif settings['method'] == 'bruteforce':
+            isDAP = True if (settings['problem'] == 'DAP') else False
+            bruteforce = BruteForce.BruteForce(network, isDAP)
+            bruteforce.startBruteforce()
 
-        elif settings['method'] == 'bruteforce' and settings['problem'] == 'DDAP':
-            bruteforce = BruteForce.BruteForce(network)
-            bruteforce.generateAllPossibleSolutions()
-            print(bruteforce.m_ListOfAllPossibleSolutions)
-            # ddap = DDAP.DDAP(network, 100)
-            # ddap.startBruteForceIterations()
+        # elif settings['method'] == 'bruteforce' and settings['problem'] == 'DDAP':
+        #     bruteforce = BruteForce.BruteForce(network)
+        #     bruteforce.generateAllPossibleSolutions()
+        #     print(bruteforce.m_ListOfAllPossibleSolutions)
+        #     # ddap = DDAP.DDAP(network, 100)
+        #     # ddap.startBruteForceIterations()
 
         else:
             print("!!!!!!!!!!!!!!!!!!!!")

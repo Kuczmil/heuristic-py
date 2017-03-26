@@ -8,7 +8,7 @@ problem=DDAP
 population_size=600
 
 # probability of crossingover - float between 0.0 and 1.0
-probab_of_crossingover=0.5
+probab_of_crossingover=0.6
 
 # probability of mutation - float between 0.0 and 1.0
 probab_of_mutation=0.1
@@ -17,7 +17,7 @@ probab_of_mutation=0.1
 stop_criterion=no_improvement
 
 # value of stop criterion
-value_of_stop_criterion=200
+value_of_stop_criterion=50
 
 # seed (integer)
-seed=53420752313238544084
+seed=53420752313238084
