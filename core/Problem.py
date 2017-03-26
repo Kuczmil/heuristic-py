@@ -55,9 +55,8 @@ class Problem():
             else:
                 # method used to add demand on more than one path
                 while demandToFulfill != 0:
-                    random.seed(time.clock())
                     loadPerGivenPath = random.randint(0, demandToFulfill)
-                    loadPerGivenPath %= 5
+                    loadPerGivenPath %= 20
                     pathToAssignLoad = random.randint(0, sizeOfListOfPaths-1)
                     listOfLoads[pathToAssignLoad] += loadPerGivenPath
                     demandToFulfill -= loadPerGivenPath
@@ -118,7 +117,7 @@ class Problem():
                 realEdge = int(edge) - 1  # Edges are counted from 1, lists from 0
                 capacityInLambdas = listOfLinks[realEdge].m_CapacityInLambdas
                 costPerFibre = listOfLinks[realEdge].m_Cost
-                totalCost += math.ceil(2 * usage / capacityInLambdas) * costPerFibre
+                totalCost += math.ceil(usage / capacityInLambdas) * costPerFibre
             dictOfCosts[numOfChromosome] = totalCost
             numOfAllel = 0
             numOfGene = 0
@@ -145,14 +144,14 @@ class Problem():
                 solutionColumn += 1
 
             for link in self.m_Network.getListOfLinks():
-                totalNumberOfNotfittedLambdas += abs(link.m_CapacityInLambdas)
+                if (link.m_CapacityInLambdas < 0):
+                    totalNumberOfNotfittedLambdas += abs(link.m_CapacityInLambdas)
                 link.resetCapacityInLambdas()
 
             dictOfCosts[numberOfChromosome] = totalNumberOfNotfittedLambdas
             totalNumberOfNotfittedLambdas = 0
             numberOfChromosome += 1
 
-        print(dictOfCosts)
         return dictOfCosts
 
 

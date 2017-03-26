@@ -2,7 +2,7 @@
 method=evolution
 
 # DAP or DDAP
-problem=DDAP
+problem=DAP
 
 # size of population
 population_size=1000
@@ -14,10 +14,10 @@ probab_of_crossingover=0.6
 probab_of_mutation=0.1
 
 # stop criterion - one from ['time', 'number_of_generations', 'number_of_mutations', 'no_improvement']
-stop_criterion=time
+stop_criterion=number_of_generations
 
 # value of stop criterion
-value_of_stop_criterion=600
+value_of_stop_criterion=60
 
 # seed (integer)
 seed=53420752313238084

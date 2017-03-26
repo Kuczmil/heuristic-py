@@ -5,19 +5,19 @@ method=evolution
 problem=DDAP
 
 # size of population
-population_size=1000
+population_size=600
 
 # probability of crossingover - float between 0.0 and 1.0
-probab_of_crossingover=0.6
+probab_of_crossingover=0.5
 
 # probability of mutation - float between 0.0 and 1.0
 probab_of_mutation=0.1
 
 # stop criterion - one from ['time', 'number_of_generations', 'number_of_mutations', 'no_improvement']
-stop_criterion=time
+stop_criterion=no_improvement
 
 # value of stop criterion
-value_of_stop_criterion=600
+value_of_stop_criterion=200
 
 # seed (integer)
-seed=53420752313238084
+seed=53420752313238544084

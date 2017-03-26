@@ -28,6 +28,9 @@ class Evolution():
     m_NumberOfMutations = 0
     m_LastBestResult = math.inf
     m_DurationOfLastBestResult = 0
+    # time variables
+    startTime = 0
+    endTime = 0
 
     def __init__(self, isDAP, startPopulationSize, probabOfCrossingover, probabOfMutation, seed, chosenStopCriterion, valueOfChosenCriterion=-1):
         self.isDAP = isDAP
@@ -51,6 +54,7 @@ class Evolution():
         #     print(population)
 
     def startEvolutionAlgorithm(self):
+        self.startTime = time.time()
         if self.m_ChosenCriterion == 'time':
             currentTime = time.time()
             stopTime = currentTime + int(self.m_ValueOfChosenCriterion) + 1 # added one as guard
@@ -126,14 +130,15 @@ class Evolution():
             else:
                 self.m_DurationOfLastBestResult += 1
         else:
+            self.endTime = time.time()
             self.saveResult(sortedCosts[0][1])
-
-    def checkIfPopulationCorrect(self):
-        pass
 
     def saveResult(self, bestCost=0):
         nameOfFile = "result_" + time.strftime("%Y%m%d-%H%M%S") + ".txt"
-        pathToFile = "../outputs/" + nameOfFile
+        pathToFile = "outputs/" + nameOfFile
+        timeOfSimulation = self.endTime - self.startTime
+        problemToSolve = "DAP" if self.isDAP else "DDAP"
+
         with open(pathToFile, 'w') as f:
             f.write("Population size: " + str(self.m_StartPopulationSize) + "\n")
             f.write("Probability of crossingover: " + str(self.m_ProbabilityOfCrossingover) + "\n")
@@ -143,14 +148,19 @@ class Evolution():
             if self.m_ValueOfChosenCriterion is not -1:
                 f.write("Value of chosen criterium: " + str(self.m_ValueOfChosenCriterion) + "\n")
 
-            f.write("\n\n\n")
+            f.write("\n")
+            f.write("Problem to solve: " + problemToSolve + "\n")
+            f.write("Time of simulation: " + str(timeOfSimulation) + " [seconds]" + "\n")
+            f.write("Number of iterations: " + str(self.m_NumberOfRound) + "\n")
+
+            f.write("\n\n")
             f.write("Cost of best chromosome: " + str(bestCost) + "\n")
             i = 0
             for gene in self.m_Population[0]:
                 f.write(str(i+1) + ": " + str(gene) + "\n")
                 i += 1
 
-            f.write("######################")
-            f.write("Details of each round:")
-            f.write("######################")
+            f.write("######################\n")
+            f.write("Details of each round:\n")
+            f.write("######################\n")
             f.writelines(self.m_ListOfBestResultOfRound)

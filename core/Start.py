@@ -1,4 +1,4 @@
-from core import Parser, Problem, DDAP, Evolution
+from core import Parser, Problem, DDAP, Evolution, BruteForce
 import sys
 import os.path
 
@@ -6,19 +6,11 @@ def printSettings(settings):
     for key, value in settings.items():
         print(str(key) + ": " + str(value))
 
-if __name__ == "__main__":
-    if (len(sys.argv) < 3):
-        print("Not enough arguments are given. Please run script with paths to file with network and input settings")
-        # pathToFile = ""
-        # while(not os.path.isfile(pathToFile)):
-        #     print("Please enter path to input file. To terminate press [N]")
-        #     pathToFile = input()
-        #     if (pathToFile == "N"):
-        #         break
-    else:
-        pathToFile = sys.argv[1]
-        pathToInputSettings = sys.argv[2]
+# if __name__ == "__main__":
+def start(arg1, arg2):
 
+    pathToFile = arg1#sys.argv[1]
+    pathToInputSettings = arg2#sys.argv[2]
     parser = Parser.Parser(pathToFile, pathToInputSettings)
 
     if parser.parseNetwork():
@@ -47,8 +39,11 @@ if __name__ == "__main__":
             dap.printSolution()
 
         elif settings['method'] == 'bruteforce' and settings['problem'] == 'DDAP':
-            ddap = DDAP.DDAP(network, 100)
-            ddap.startBruteForceIterations()
+            bruteforce = BruteForce.BruteForce(network)
+            bruteforce.generateAllPossibleSolutions()
+            print(bruteforce.m_ListOfAllPossibleSolutions)
+            # ddap = DDAP.DDAP(network, 100)
+            # ddap.startBruteForceIterations()
 
         else:
             print("!!!!!!!!!!!!!!!!!!!!")

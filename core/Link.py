@@ -23,5 +23,5 @@ class Link():
             return False
 
     def resetCapacityInLambdas(self):
-        self.m_CapacityInLambdas = int(self.m_LambdasPerFiber) * int(self.m_Capacity)
+        self.m_CapacityInLambdas = int(self.m_LambdasPerFiber) * int(self.m_Capacity) / 2
         # print("Capacity in lambdas equals: " + str(self.m_CapacityInLambdas))
