@@ -124,7 +124,7 @@ class Evolution():
             self.m_NumberOfRound += 1
 
             # for checking duration of lastest best result
-            if int(sortedCosts[0][1]) != self.m_LastBestResult:
+            if int(sortedCosts[0][1]) < self.m_LastBestResult:
                 self.m_LastBestResult = sortedCosts[0][1]
                 self.m_DurationOfLastBestResult = 0
             else:
